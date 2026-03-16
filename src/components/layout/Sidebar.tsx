@@ -39,7 +39,7 @@ export default function Sidebar({ activePage, onNavigate }: SidebarProps) {
           </div>
           {!collapsed && (
             <span className="text-sm font-bold tracking-wide text-electric overflow-hidden whitespace-nowrap">
-              AlphaRenew
+              AIrestructuring
             </span>
           )}
         </div>

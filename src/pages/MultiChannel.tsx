@@ -19,8 +19,8 @@ const chatSimulations: Record<string, Array<{ type: "notification" | "user" | "a
   微信: [
     {
       type: "notification",
-      label: "AlphaRenew AI 预警",
-      content: "【AlphaRenew AI 预警】雪浪环境(300385)申请预重整，AI匹配度82分，建议关注。主营危废处理，核心资产包括3个处理基地。",
+      label: "AIrestructuring AI 预警",
+      content: "【AIrestructuring AI 预警】雪浪环境(300385)申请预重整，AI匹配度82分，建议关注。主营危废处理，核心资产包括3个处理基地。",
     },
     {
       type: "user",
@@ -41,7 +41,7 @@ const chatSimulations: Record<string, Array<{ type: "notification" | "user" | "a
   飞书: [
     {
       type: "user",
-      content: "@AlphaRenew 帮我生成一份本周投资委员会汇报材料",
+      content: "@AIrestructuring 帮我生成一份本周投资委员会汇报材料",
     },
     {
       type: "ai",
