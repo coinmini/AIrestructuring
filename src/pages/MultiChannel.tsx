@@ -5,15 +5,26 @@ import {
   MessageCircle,
   Bell,
   ArrowRight,
+  Download,
+  Search,
+  Zap,
 } from "lucide-react"
 import { cn } from "../lib/utils"
 import { channelConfig, pushRules } from "../data/mock-data"
 
-const channelIcons: Record<string, string> = {
-  微信: "bg-green-500/15 text-green-400",
-  钉钉: "bg-blue-500/15 text-blue-400",
-  飞书: "bg-purple-500/15 text-purple-400",
+const channelAccentBorders: Record<string, string> = {
+  微信: "border-t-2 border-t-green-400",
+  钉钉: "border-t-2 border-t-blue-400",
+  飞书: "border-t-2 border-t-purple-400",
 }
+
+const channelIconColors: Record<string, string> = {
+  微信: "bg-gradient-to-br from-green-500/25 to-green-500/10 text-green-400",
+  钉钉: "bg-gradient-to-br from-blue-500/25 to-blue-500/10 text-blue-400",
+  飞书: "bg-gradient-to-br from-purple-500/25 to-purple-500/10 text-purple-400",
+}
+
+const modeIcons = [Download, Search, Zap]
 
 const chatSimulations: Record<string, Array<{ type: "notification" | "user" | "ai"; content: string; label?: string }>> = {
   微信: [
@@ -83,7 +94,7 @@ export default function MultiChannel() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 animate-slide-up">
       <div className="flex items-end justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight glow-text-blue">
@@ -93,40 +104,43 @@ export default function MultiChannel() {
             微信、钉钉、飞书全渠道AI交互，被动接收推送或主动布置任务
           </p>
         </div>
-        <div className="flex items-center gap-4 text-xs">
-          <span className="flex items-center gap-1.5 rounded-full bg-green-500/15 px-3 py-1 text-green-400 border border-green-500/30">
+        <div className="flex items-center gap-3 text-xs">
+          <span className="badge badge-green">
             <CheckCircle className="h-3 w-3" />
             已连接 3端
           </span>
-          <span className="text-muted-foreground">
-            接入用户 <span className="font-semibold text-foreground">{totalUsers}</span>
+          <span className="badge badge-muted">
+            接入用户 {totalUsers}
           </span>
-          <span className="text-muted-foreground">
-            今日消息 <span className="font-semibold text-foreground">{totalMessages}</span>
+          <span className="badge badge-muted">
+            今日消息 {totalMessages}
           </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-4 stagger-children">
         {channelConfig.map((channel) => (
           <div
             key={channel.name}
-            className="bg-card rounded-lg border border-border/50 p-5"
+            className={cn(
+              "card hover-lift",
+              channelAccentBorders[channel.name]
+            )}
           >
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <div
                   className={cn(
-                    "flex h-8 w-8 items-center justify-center rounded-full",
-                    channelIcons[channel.name]
+                    "flex h-8 w-8 items-center justify-center rounded-lg",
+                    channelIconColors[channel.name]
                   )}
                 >
                   <Smartphone className="h-4 w-4" />
                 </div>
                 <h3 className="text-sm font-bold">{channel.name}</h3>
               </div>
-              <span className="flex items-center gap-1 rounded-full bg-green-500/15 px-2 py-0.5 text-[10px] text-green-400 border border-green-500/30">
-                <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
+              <span className="badge badge-green">
+                <span className="status-dot status-dot-green !w-[6px] !h-[6px]" />
                 已连接
               </span>
             </div>
@@ -135,7 +149,7 @@ export default function MultiChannel() {
               {channel.features.map((f) => (
                 <span
                   key={f}
-                  className="rounded-full bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground"
+                  className="badge badge-muted"
                 >
                   {f}
                 </span>
@@ -153,19 +167,19 @@ export default function MultiChannel() {
         ))}
       </div>
 
-      <div className="bg-card rounded-lg border border-border/50 p-5">
+      <div className="card-glass">
         <div className="flex items-center gap-2 mb-4">
           <MessageCircle className="h-4 w-4 text-electric" />
           <h2 className="text-sm font-semibold">消息模拟</h2>
-          <div className="ml-auto flex rounded-lg border border-border/50 p-0.5">
+          <div className="ml-auto flex gap-4">
             {Object.keys(chatSimulations).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={cn(
-                  "rounded-md px-3 py-1 text-xs font-medium transition-colors",
+                  "tab-underline text-xs font-medium transition-colors",
                   activeTab === tab
-                    ? "bg-electric/15 text-electric"
+                    ? "active text-electric"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -178,10 +192,10 @@ export default function MultiChannel() {
           {chatSimulations[activeTab]?.map((msg, i) => {
             if (msg.type === "notification") {
               return (
-                <div key={i} className="rounded-lg bg-amber/5 border border-amber/20 px-4 py-3">
+                <div key={i} className="rounded-xl bg-amber/5 border border-amber/20 px-4 py-3 animate-fade-in">
                   <div className="flex items-center gap-1.5 mb-1">
                     <Bell className="h-3 w-3 text-amber" />
-                    <span className="text-[10px] font-medium text-amber">
+                    <span className="badge badge-amber !text-[10px]">
                       {msg.label}
                     </span>
                   </div>
@@ -189,7 +203,7 @@ export default function MultiChannel() {
                     {msg.content}
                   </p>
                   {activeTab === "钉钉" && (
-                    <button className="mt-2 rounded border border-electric/40 px-3 py-1 text-[10px] font-medium text-electric hover:bg-electric/10 transition-colors">
+                    <button className="btn-secondary mt-2 !px-3 !py-1 !text-[10px]">
                       审批
                     </button>
                   )}
@@ -198,25 +212,27 @@ export default function MultiChannel() {
             }
             if (msg.type === "user") {
               return (
-                <div key={i} className="flex justify-end">
-                  <div className="rounded-lg bg-electric/10 border border-electric/30 px-4 py-2.5">
+                <div key={i} className="flex justify-end animate-slide-in-right">
+                  <div className="rounded-xl bg-gradient-to-br from-electric/10 to-electric/5 border border-electric/20 px-4 py-2.5">
                     <p className="text-xs leading-relaxed">{msg.content}</p>
                   </div>
                 </div>
               )
             }
             return (
-              <div key={i} className="rounded-lg bg-secondary/50 border border-border/30 px-4 py-2.5">
-                <p className="text-xs text-foreground/80 leading-relaxed">
-                  {msg.content}
-                </p>
+              <div key={i} className="animate-fade-in">
+                <div className="card-glass !rounded-xl !py-2.5 !px-4">
+                  <p className="text-xs text-foreground/80 leading-relaxed">
+                    {msg.content}
+                  </p>
+                </div>
               </div>
             )
           })}
         </div>
       </div>
 
-      <div className="bg-card rounded-lg border border-border/50 p-5">
+      <div className="card">
         <h2 className="mb-3 text-sm font-semibold flex items-center gap-2">
           <Bell className="h-4 w-4 text-electric" />
           推送规则配置
@@ -236,7 +252,7 @@ export default function MultiChannel() {
               {pushRules.map((rule, i) => (
                 <tr
                   key={rule.name}
-                  className="border-b border-border/30 last:border-0"
+                  className="table-row-hover border-b border-border/30 last:border-0"
                 >
                   <td className="py-2.5 font-medium">{rule.name}</td>
                   <td className="py-2.5 text-muted-foreground">
@@ -249,20 +265,13 @@ export default function MultiChannel() {
                     {rule.description}
                   </td>
                   <td className="py-2.5 text-right">
-                    <button
+                    <div
                       onClick={() => handleToggle(i)}
                       className={cn(
-                        "relative inline-flex h-5 w-9 items-center rounded-full transition-colors",
-                        ruleStates[i] ? "bg-green-500" : "bg-secondary"
+                        "toggle-switch inline-block",
+                        ruleStates[i] && "active"
                       )}
-                    >
-                      <span
-                        className={cn(
-                          "inline-block h-3.5 w-3.5 rounded-full bg-white transition-transform",
-                          ruleStates[i] ? "translate-x-4.5" : "translate-x-0.5"
-                        )}
-                      />
-                    </button>
+                    />
                   </td>
                 </tr>
               ))}
@@ -271,25 +280,33 @@ export default function MultiChannel() {
         </div>
       </div>
 
-      <div className="bg-card rounded-lg border border-border/50 p-5">
+      <div className="card">
         <h2 className="mb-3 text-sm font-semibold flex items-center gap-2">
           <ArrowRight className="h-4 w-4 text-electric" />
           交互模式说明
         </h2>
-        <div className="grid grid-cols-3 gap-4">
-          {interactionModes.map((mode) => (
-            <div
-              key={mode.title}
-              className="rounded-lg border border-border/30 bg-secondary/30 p-4"
-            >
-              <h3 className="text-sm font-semibold mb-2 text-electric">
-                {mode.title}
-              </h3>
-              <p className="text-xs text-foreground/70 leading-relaxed">
-                {mode.description}
-              </p>
-            </div>
-          ))}
+        <div className="grid grid-cols-3 gap-4 stagger-children">
+          {interactionModes.map((mode, i) => {
+            const ModeIcon = modeIcons[i]
+            return (
+              <div
+                key={mode.title}
+                className="card hover-lift"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-electric/20 to-electric/5">
+                    <ModeIcon className="h-3.5 w-3.5 text-electric" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-electric">
+                    {mode.title}
+                  </h3>
+                </div>
+                <p className="text-xs text-foreground/70 leading-relaxed">
+                  {mode.description}
+                </p>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

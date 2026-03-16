@@ -1,7 +1,19 @@
 import { useState } from "react"
-import { Send, Bot, User, MessageSquare, Zap } from "lucide-react"
+import {
+  Send,
+  Bot,
+  User,
+  MessageSquare,
+  Zap,
+  BarChart3,
+  Search,
+  FileText,
+  Lightbulb,
+} from "lucide-react"
 import { cn } from "../lib/utils"
 import { aiConversations, quickCommands } from "../data/mock-data"
+
+const commandIcons = [BarChart3, Search, FileText, Lightbulb]
 
 const messages = [
   {
@@ -41,7 +53,7 @@ export default function AIAssistant() {
 
   return (
     <div className="flex h-[calc(100vh-8rem)] gap-0">
-      <div className="w-64 shrink-0 border-r border-border/50 pr-4 flex flex-col">
+      <div className="w-64 shrink-0 border-r border-border/50 bg-card/50 pr-4 pl-1 flex flex-col">
         <div className="mb-5">
           <h1 className="text-lg font-bold tracking-tight glow-text-blue">
             AI 助手
@@ -57,14 +69,18 @@ export default function AIAssistant() {
             快捷指令
           </h3>
           <div className="space-y-1.5">
-            {quickCommands.map((cmd) => (
-              <button
-                key={cmd.label}
-                className="w-full text-left rounded border border-border/50 px-2.5 py-1.5 text-xs text-foreground/80 hover:bg-electric/10 hover:border-electric/30 transition-colors"
-              >
-                {cmd.label}
-              </button>
-            ))}
+            {quickCommands.map((cmd, i) => {
+              const CmdIcon = commandIcons[i] ?? Zap
+              return (
+                <button
+                  key={cmd.label}
+                  className="btn-ghost w-full text-left flex items-center gap-2 !px-2.5 !py-1.5 !text-xs !rounded-lg border border-transparent hover:border-border/50"
+                >
+                  <CmdIcon className="h-3 w-3 shrink-0 text-electric/60" />
+                  {cmd.label}
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -79,10 +95,10 @@ export default function AIAssistant() {
                 key={conv.title}
                 onClick={() => setActiveConversation(i)}
                 className={cn(
-                  "w-full text-left rounded px-2.5 py-2 transition-colors",
+                  "w-full text-left rounded-lg px-2.5 py-2 transition-all",
                   activeConversation === i
-                    ? "bg-electric/10 border border-electric/30"
-                    : "hover:bg-secondary/50"
+                    ? "bg-electric/10 border-l-2 border-l-electric border border-electric/20"
+                    : "hover:bg-secondary/50 border-l-2 border-l-transparent border border-transparent"
                 )}
               >
                 <p className="text-xs font-medium truncate">{conv.title}</p>
@@ -99,22 +115,22 @@ export default function AIAssistant() {
         <div className="flex-1 overflow-y-auto space-y-4 pb-4">
           {messages.map((msg, i) =>
             msg.role === "user" ? (
-              <div key={i} className="flex justify-end">
+              <div key={i} className="flex justify-end animate-slide-in-right">
                 <div className="max-w-[70%] flex gap-2">
-                  <div className="rounded-lg bg-electric/10 border border-electric/30 px-4 py-3">
+                  <div className="rounded-xl bg-gradient-to-br from-electric/10 to-electric/5 border border-electric/20 px-4 py-3">
                     <p className="text-sm leading-relaxed">{msg.content as string}</p>
                   </div>
-                  <div className="shrink-0 mt-1 flex h-7 w-7 items-center justify-center rounded-full bg-electric/20">
+                  <div className="shrink-0 mt-1 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-electric/30 to-electric/10 border border-electric/20">
                     <User className="h-3.5 w-3.5 text-electric" />
                   </div>
                 </div>
               </div>
             ) : (
-              <div key={i} className="flex gap-2">
-                <div className="shrink-0 mt-1 flex h-7 w-7 items-center justify-center rounded-full bg-teal/20">
+              <div key={i} className="flex gap-2 animate-fade-in">
+                <div className="shrink-0 mt-1 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-teal/30 to-teal/10 border border-teal/20">
                   <Bot className="h-3.5 w-3.5 text-teal" />
                 </div>
-                <div className="max-w-[75%] rounded-lg bg-card border border-border/50 px-4 py-3">
+                <div className="max-w-[75%] card-glass !py-3 !px-4">
                   {(msg.content as Array<{ heading?: string; text: string }>).map(
                     (section, j) => (
                       <div key={j} className={cn(j > 0 && "mt-3")}>
@@ -134,7 +150,7 @@ export default function AIAssistant() {
                       {msg.sources.map((src) => (
                         <span
                           key={src}
-                          className="rounded-full bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground"
+                          className="badge badge-muted"
                         >
                           来源: {src}
                         </span>
@@ -146,17 +162,17 @@ export default function AIAssistant() {
             )
           )}
 
-          <div className="flex gap-2">
-            <div className="shrink-0 mt-1 flex h-7 w-7 items-center justify-center rounded-full bg-teal/20">
+          <div className="flex gap-2 animate-fade-in">
+            <div className="shrink-0 mt-1 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-teal/30 to-teal/10 border border-teal/20">
               <Bot className="h-3.5 w-3.5 text-teal" />
             </div>
-            <div className="rounded-lg bg-card border border-border/50 px-4 py-3">
-              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+            <div className="card-glass !py-3 !px-4">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <span>AI 正在思考</span>
-                <span className="inline-flex gap-0.5">
-                  <span className="animate-bounce [animation-delay:0ms] h-1 w-1 rounded-full bg-electric" />
-                  <span className="animate-bounce [animation-delay:150ms] h-1 w-1 rounded-full bg-electric" />
-                  <span className="animate-bounce [animation-delay:300ms] h-1 w-1 rounded-full bg-electric" />
+                <span className="inline-flex items-center gap-1">
+                  <span className="animate-bounce [animation-delay:0ms] h-1.5 w-1.5 rounded-full bg-electric" />
+                  <span className="animate-bounce [animation-delay:150ms] h-1.5 w-1.5 rounded-full bg-electric/70" />
+                  <span className="animate-bounce [animation-delay:300ms] h-1.5 w-1.5 rounded-full bg-electric/40" />
                 </span>
               </div>
             </div>
@@ -170,9 +186,9 @@ export default function AIAssistant() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="输入您的问题，AI将基于OpenClaw引擎为您分析..."
-              className="flex-1 rounded-lg border border-border/50 bg-secondary/50 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-electric/50"
+              className="flex-1 rounded-xl border border-border/50 bg-secondary/50 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-electric/50 focus:ring-1 focus:ring-electric/20 focus:shadow-[0_0_12px_oklch(78%_0.15_220_/_0.15)] transition-all"
             />
-            <button className="shrink-0 rounded-lg bg-electric px-4 py-2.5 text-sm font-medium text-white hover:bg-electric/90 transition-colors flex items-center gap-1.5">
+            <button className="btn-primary shrink-0 flex items-center gap-1.5 !rounded-xl">
               <Send className="h-4 w-4" />
               发送
             </button>

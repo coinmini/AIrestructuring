@@ -4,6 +4,8 @@ import {
   Briefcase,
   AlertTriangle,
   Activity,
+  ArrowUpRight,
+  ArrowDownRight,
 } from "lucide-react"
 import {
   LineChart,
@@ -19,6 +21,8 @@ import {
   Bar,
   ResponsiveContainer,
   Legend,
+  Area,
+  AreaChart,
 } from "recharts"
 import { cn } from "../lib/utils"
 import {
@@ -31,17 +35,17 @@ import {
 } from "../data/mock-data"
 
 const sourceColors: Record<string, string> = {
-  舆情引擎: "bg-teal/20 text-teal border-teal/30",
-  AI尽调官: "bg-electric/20 text-electric border-electric/30",
-  困境雷达: "bg-amber/20 text-amber border-amber/30",
-  投后智管: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-  风控引擎: "bg-coral/20 text-coral border-coral/30",
+  舆情引擎: "badge badge-teal",
+  AI尽调官: "badge badge-electric",
+  困境雷达: "badge badge-amber",
+  投后智管: "badge badge-muted",
+  风控引擎: "badge badge-coral",
 }
 
-const riskStyles: Record<string, string> = {
-  低: "bg-green-500/20 text-green-400",
-  中: "bg-amber/20 text-amber",
-  高: "bg-coral/20 text-coral",
+const riskBadge: Record<string, string> = {
+  低: "badge badge-green",
+  中: "badge badge-amber",
+  高: "badge badge-coral",
 }
 
 function scoreColor(score: number): string {
@@ -62,46 +66,49 @@ export default function Dashboard() {
             COMMAND CENTER · 数据更新于 2026-03-08 14:32 CST
           </p>
         </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-green-500/15 px-3 py-1 text-xs font-medium text-green-400 border border-green-500/30">
+        <span className="badge badge-green">
           <span className="status-dot status-dot-green" />
           实时模式
         </span>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="stagger-children grid grid-cols-4 gap-4">
         <StatCard
-          icon={<Briefcase className="h-4 w-4 text-electric" />}
+          icon={<Briefcase className="h-5 w-5 text-electric" />}
+          iconBg="bg-electric/10"
           label="在管项目"
           value={`${dashboardStats.projects}个`}
           change="较上月 +2"
           positive
         />
         <StatCard
-          icon={<TrendingUp className="h-4 w-4 text-electric" />}
+          icon={<TrendingUp className="h-5 w-5 text-teal" />}
+          iconBg="bg-teal/10"
           label="在管资产规模"
           value={`${dashboardStats.aum}亿元`}
           change="+5.2%"
           positive
         />
         <StatCard
-          icon={<Activity className="h-4 w-4 text-electric" />}
+          icon={<Activity className="h-5 w-5 text-amber" />}
+          iconBg="bg-amber/10"
           label="平均IRR"
           value={`${dashboardStats.avgIrr}%`}
           change="+3.1%"
           positive
         />
         <StatCard
-          icon={<AlertTriangle className="h-4 w-4 text-coral" />}
+          icon={<AlertTriangle className="h-5 w-5 text-coral" />}
+          iconBg="bg-coral/10"
           label="风险预警"
           value={`${dashboardStats.alerts}条`}
-          change=""
+          change="需关注"
           positive={false}
-          coral
         />
       </div>
 
       <div className="grid grid-cols-10 gap-4">
-        <div className="col-span-7 bg-card rounded-lg border border-border/50 p-5">
+        <div className="col-span-7 card animate-fade-in">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-sm font-semibold">投资收益趋势</h2>
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
@@ -116,26 +123,26 @@ export default function Dashboard() {
             </div>
           </div>
           <ResponsiveContainer width="100%" height={260}>
-            <LineChart data={investmentTrend}>
+            <AreaChart data={investmentTrend}>
+              <defs>
+                <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="oklch(78% 0.15 220)" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="oklch(78% 0.15 220)" stopOpacity={0} />
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" tick={{ fontSize: 11 }} />
               <YAxis
                 tick={{ fontSize: 11 }}
                 tickFormatter={(v: number) => `${v}%`}
               />
-              <Tooltip
-                contentStyle={{
-                  background: "oklch(16% 0.015 260)",
-                  border: "1px solid oklch(25% 0.015 260)",
-                  borderRadius: 8,
-                  fontSize: 12,
-                }}
-              />
-              <Line
+              <Tooltip contentStyle={{}} wrapperClassName="chart-tooltip" />
+              <Area
                 type="monotone"
                 dataKey="收益率"
                 stroke="oklch(78% 0.15 220)"
                 strokeWidth={2}
+                fill="url(#areaGradient)"
                 dot={false}
               />
               <Line
@@ -146,11 +153,11 @@ export default function Dashboard() {
                 strokeDasharray="4 4"
                 dot={false}
               />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="col-span-3 bg-card rounded-lg border border-border/50 p-5">
+        <div className="col-span-3 card animate-fade-in">
           <h2 className="mb-4 text-sm font-semibold">投资组合分布</h2>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
@@ -167,14 +174,7 @@ export default function Dashboard() {
                   <Cell key={entry.name} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip
-                contentStyle={{
-                  background: "oklch(16% 0.015 260)",
-                  border: "1px solid oklch(25% 0.015 260)",
-                  borderRadius: 8,
-                  fontSize: 12,
-                }}
-              />
+              <Tooltip contentStyle={{}} wrapperClassName="chart-tooltip" />
             </PieChart>
           </ResponsiveContainer>
           <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
@@ -192,10 +192,10 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-7 bg-card rounded-lg border border-border/50 p-5">
+        <div className="col-span-7 card animate-fade-in">
           <div className="mb-3 flex items-center gap-2">
             <h2 className="text-sm font-semibold">项目管线</h2>
-            <span className="rounded-full bg-electric/15 px-2 py-0.5 text-[10px] font-medium text-electric">
+            <span className="badge badge-electric">
               {pipelineProjects.length}
             </span>
           </div>
@@ -215,7 +215,7 @@ export default function Dashboard() {
                 {pipelineProjects.map((p) => (
                   <tr
                     key={p.name}
-                    className="border-b border-border/30 last:border-0"
+                    className="table-row-hover border-b border-border/30 last:border-0"
                   >
                     <td className="py-2.5 font-medium">{p.name}</td>
                     <td className="py-2.5 text-muted-foreground">
@@ -224,9 +224,13 @@ export default function Dashboard() {
                     <td className="py-2.5 text-muted-foreground">{p.stage}</td>
                     <td className="py-2.5">
                       <div className="flex items-center gap-2">
-                        <div className="h-1.5 w-20 rounded-full bg-secondary">
+                        <div className="progress-bar w-20">
                           <div
-                            className="h-full rounded-full bg-electric"
+                            className={cn(
+                              "progress-bar-fill",
+                              p.progress < 40 && "progress-bar-fill-coral",
+                              p.progress >= 40 && p.progress < 70 && "progress-bar-fill-amber"
+                            )}
                             style={{ width: `${p.progress}%` }}
                           />
                         </div>
@@ -239,12 +243,7 @@ export default function Dashboard() {
                       {p.score}
                     </td>
                     <td className="py-2.5">
-                      <span
-                        className={cn(
-                          "rounded-full px-2 py-0.5 text-[10px] font-medium",
-                          riskStyles[p.risk]
-                        )}
-                      >
+                      <span className={riskBadge[p.risk]}>
                         {p.risk}
                       </span>
                     </td>
@@ -255,18 +254,18 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="col-span-5 bg-card rounded-lg border border-border/50 p-5">
+        <div className="col-span-5 card animate-fade-in">
           <h2 className="mb-3 text-sm font-semibold flex items-center gap-2">
             <Activity className="h-4 w-4 text-electric" />
             AI 实时动态
           </h2>
-          <div className="space-y-3">
+          <div className="space-y-1">
             {aiActivities.map((a, i) => (
-              <div key={i} className="flex gap-3 text-xs">
+              <div key={i} className="feed-item rounded-r-lg py-2.5 pr-3 flex gap-3 text-xs">
                 <span
                   className={cn(
-                    "mt-0.5 shrink-0 rounded border px-1.5 py-0.5 text-[10px] font-medium",
-                    sourceColors[a.source] ?? "bg-secondary text-muted-foreground"
+                    "mt-0.5 shrink-0",
+                    sourceColors[a.source] ?? "badge badge-muted"
                   )}
                 >
                   {a.source}
@@ -283,26 +282,29 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="bg-card rounded-lg border border-border/50 p-5">
+      <div className="card animate-fade-in">
         <h2 className="mb-4 text-sm font-semibold">
           市场概况（年度重整数据）
         </h2>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={marketData}>
+            <defs>
+              <linearGradient id="barGrad1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="oklch(78% 0.15 220)" stopOpacity={1} />
+                <stop offset="100%" stopColor="oklch(78% 0.15 220)" stopOpacity={0.6} />
+              </linearGradient>
+              <linearGradient id="barGrad2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="oklch(72% 0.14 175)" stopOpacity={1} />
+                <stop offset="100%" stopColor="oklch(72% 0.14 175)" stopOpacity={0.6} />
+              </linearGradient>
+            </defs>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} />
-            <Tooltip
-              contentStyle={{
-                background: "oklch(16% 0.015 260)",
-                border: "1px solid oklch(25% 0.015 260)",
-                borderRadius: 8,
-                fontSize: 12,
-              }}
-            />
+            <Tooltip contentStyle={{}} wrapperClassName="chart-tooltip" />
             <Legend wrapperStyle={{ fontSize: 11 }} />
-            <Bar dataKey="重整受理" fill="oklch(78% 0.15 220)" radius={[3, 3, 0, 0]} />
-            <Bar dataKey="重整批准" fill="oklch(72% 0.14 175)" radius={[3, 3, 0, 0]} />
+            <Bar dataKey="重整受理" fill="url(#barGrad1)" radius={[3, 3, 0, 0]} />
+            <Bar dataKey="重整批准" fill="url(#barGrad2)" radius={[3, 3, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
         <p className="mt-3 text-xs text-muted-foreground leading-relaxed">
@@ -315,33 +317,40 @@ export default function Dashboard() {
 
 function StatCard({
   icon,
+  iconBg,
   label,
   value,
   change,
   positive,
-  coral,
 }: {
   icon: React.ReactNode
+  iconBg: string
   label: string
   value: string
   change: string
   positive: boolean
-  coral?: boolean
 }) {
   return (
-    <div className="bg-card rounded-lg border border-border/50 p-4">
-      <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
-        {icon}
-        {label}
+    <div className="card-highlight gradient-border">
+      <div className="mb-3 flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">{label}</span>
+        <div className={cn("stat-card-icon", iconBg)}>
+          {icon}
+        </div>
       </div>
-      <p className={cn("text-xl font-bold", coral && "text-coral")}>{value}</p>
+      <p className="text-2xl font-bold">{value}</p>
       {change && (
         <p
           className={cn(
-            "mt-1 text-xs",
+            "mt-1.5 flex items-center gap-1 text-xs font-medium",
             positive ? "text-green-400" : "text-coral"
           )}
         >
+          {positive ? (
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          ) : (
+            <ArrowDownRight className="h-3.5 w-3.5" />
+          )}
           {change}
         </p>
       )}

@@ -58,13 +58,53 @@ body {
   background: oklch(30% 0.01 260);
   border-radius: 3px;
 }
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(40% 0.01 260);
+}
 
 /* Hex pattern background */
 .hex-pattern {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2300d4ff' fill-opacity='0.03'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* Glow effects */
+/* ==================== Card System ==================== */
+.card {
+  background: oklch(16% 0.015 260);
+  border: 1px solid oklch(25% 0.015 260 / 0.5);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+.card:hover {
+  border-color: oklch(30% 0.02 260);
+  box-shadow: 0 4px 24px oklch(0% 0 0 / 0.3), 0 0 0 1px oklch(25% 0.015 260 / 0.3);
+}
+.card-glass {
+  background: oklch(16% 0.015 260 / 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid oklch(30% 0.02 260 / 0.3);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+.card-glass:hover {
+  border-color: oklch(78% 0.15 220 / 0.2);
+  box-shadow: 0 8px 32px oklch(0% 0 0 / 0.4), 0 0 1px oklch(78% 0.15 220 / 0.15);
+}
+.card-highlight {
+  background: linear-gradient(135deg, oklch(16% 0.015 260) 0%, oklch(18% 0.02 240) 100%);
+  border: 1px solid oklch(78% 0.15 220 / 0.15);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+.card-highlight:hover {
+  border-color: oklch(78% 0.15 220 / 0.3);
+  box-shadow: 0 0 20px oklch(78% 0.15 220 / 0.08);
+}
+
+/* ==================== Glow effects ==================== */
 .glow-blue {
   box-shadow: 0 0 15px oklch(78% 0.15 220 / 0.3), 0 0 30px oklch(78% 0.15 220 / 0.1);
 }
@@ -78,7 +118,136 @@ body {
   text-shadow: 0 0 10px oklch(78% 0.16 75 / 0.5);
 }
 
-/* Scan line animation */
+/* ==================== Buttons ==================== */
+.btn-primary {
+  background: oklch(78% 0.15 220);
+  color: oklch(12% 0.015 260);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover {
+  background: oklch(82% 0.15 220);
+  box-shadow: 0 0 16px oklch(78% 0.15 220 / 0.3);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+.btn-secondary {
+  background: transparent;
+  color: oklch(78% 0.15 220);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid oklch(78% 0.15 220 / 0.3);
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+  background: oklch(78% 0.15 220 / 0.1);
+  border-color: oklch(78% 0.15 220 / 0.5);
+}
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+.btn-ghost {
+  background: transparent;
+  color: oklch(60% 0.02 250);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+.btn-ghost:hover {
+  background: oklch(20% 0.015 260);
+  color: oklch(92% 0.01 250);
+}
+
+/* ==================== Badge system ==================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.badge-electric {
+  background: oklch(78% 0.15 220 / 0.15);
+  color: oklch(78% 0.15 220);
+  border: 1px solid oklch(78% 0.15 220 / 0.2);
+}
+.badge-amber {
+  background: oklch(78% 0.16 75 / 0.15);
+  color: oklch(78% 0.16 75);
+  border: 1px solid oklch(78% 0.16 75 / 0.2);
+}
+.badge-teal {
+  background: oklch(72% 0.14 175 / 0.15);
+  color: oklch(72% 0.14 175);
+  border: 1px solid oklch(72% 0.14 175 / 0.2);
+}
+.badge-coral {
+  background: oklch(65% 0.2 25 / 0.15);
+  color: oklch(65% 0.2 25);
+  border: 1px solid oklch(65% 0.2 25 / 0.2);
+}
+.badge-green {
+  background: oklch(72% 0.2 150 / 0.15);
+  color: oklch(72% 0.2 150);
+  border: 1px solid oklch(72% 0.2 150 / 0.2);
+}
+.badge-muted {
+  background: oklch(22% 0.01 260);
+  color: oklch(60% 0.02 250);
+  border: 1px solid oklch(25% 0.015 260);
+}
+
+/* ==================== Progress bar ==================== */
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: oklch(22% 0.01 260);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, oklch(78% 0.15 220), oklch(72% 0.14 175));
+  transition: width 0.6s ease;
+  box-shadow: 0 0 8px oklch(78% 0.15 220 / 0.3);
+}
+.progress-bar-fill-amber {
+  background: linear-gradient(90deg, oklch(78% 0.16 75), oklch(72% 0.14 175));
+  box-shadow: 0 0 8px oklch(78% 0.16 75 / 0.3);
+}
+.progress-bar-fill-coral {
+  background: linear-gradient(90deg, oklch(65% 0.2 25), oklch(70% 0.18 40));
+  box-shadow: 0 0 8px oklch(65% 0.2 25 / 0.3);
+}
+
+/* ==================== Table enhancements ==================== */
+.table-row-hover {
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+.table-row-hover:hover {
+  background-color: oklch(20% 0.015 260);
+}
+
+/* ==================== Scan line animation ==================== */
 .scan-line {
   position: relative;
   overflow: hidden;
@@ -94,7 +263,7 @@ body {
   animation: scan 3s linear infinite;
 }
 
-/* Status dots */
+/* ==================== Status dots ==================== */
 .status-dot {
   width: 8px;
   height: 8px;
@@ -114,7 +283,56 @@ body {
   box-shadow: 0 0 6px oklch(65% 0.2 25 / 0.6);
 }
 
-/* Keyframes */
+/* ==================== Toggle switch ==================== */
+.toggle-switch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: oklch(25% 0.015 260);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.toggle-switch.active {
+  background: oklch(72% 0.2 150);
+  box-shadow: 0 0 8px oklch(72% 0.2 150 / 0.3);
+}
+.toggle-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.3s ease;
+  box-shadow: 0 1px 3px oklch(0% 0 0 / 0.3);
+}
+.toggle-switch.active::after {
+  transform: translateX(16px);
+}
+
+/* ==================== Chart tooltip ==================== */
+.chart-tooltip {
+  background: oklch(18% 0.015 260 / 0.95) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid oklch(30% 0.02 260) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem !important;
+  box-shadow: 0 8px 32px oklch(0% 0 0 / 0.4) !important;
+}
+.chart-tooltip .recharts-tooltip-label {
+  color: oklch(92% 0.01 250) !important;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.chart-tooltip .recharts-tooltip-item {
+  color: oklch(78% 0.01 250) !important;
+  font-size: 0.75rem;
+}
+
+/* ==================== Keyframes ==================== */
 @keyframes scan {
   0% { left: -100%; }
   100% { left: 100%; }
@@ -127,12 +345,181 @@ body {
   0% { opacity: 0; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes slide-up {
+  0% { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-right {
+  0% { opacity: 0; transform: translateX(12px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes scale-in {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-/* Recharts custom */
+/* Animation utility classes */
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out;
+}
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out;
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s ease-out;
+}
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+/* Staggered children animation */
+.stagger-children > * {
+  animation: slide-up 0.5s ease-out both;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 360ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 420ms; }
+
+/* ==================== Gradient borders ==================== */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, oklch(78% 0.15 220 / 0.3), oklch(72% 0.14 175 / 0.1), oklch(78% 0.16 75 / 0.2));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+/* ==================== Stat card with icon bg ==================== */
+.stat-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ==================== Recharts custom ==================== */
 .recharts-cartesian-grid line {
   stroke: oklch(25% 0.015 260);
 }
 .recharts-text {
   fill: oklch(60% 0.02 250);
   font-size: 11px;
+}
+.recharts-tooltip-cursor {
+  stroke: oklch(78% 0.15 220 / 0.2);
+}
+.recharts-active-dot {
+  filter: drop-shadow(0 0 4px oklch(78% 0.15 220 / 0.5));
+}
+.recharts-legend-item-text {
+  color: oklch(70% 0.02 250) !important;
+  font-size: 0.75rem !important;
+}
+
+/* ==================== Interactive card hover lift ==================== */
+.hover-lift {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px oklch(0% 0 0 / 0.3);
+}
+
+/* ==================== Activity feed ==================== */
+.feed-item {
+  position: relative;
+  padding-left: 1rem;
+  border-left: 2px solid oklch(25% 0.015 260);
+  transition: all 0.2s ease;
+}
+.feed-item:hover {
+  border-left-color: oklch(78% 0.15 220);
+  background: oklch(18% 0.015 260 / 0.5);
+}
+.feed-item::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 0.75rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: oklch(78% 0.15 220);
+  border: 2px solid oklch(12% 0.015 260);
+}
+
+/* ==================== Tab underline ==================== */
+.tab-underline {
+  position: relative;
+  padding-bottom: 0.5rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.tab-underline::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: oklch(78% 0.15 220);
+  border-radius: 1px;
+  transition: width 0.3s ease;
+}
+.tab-underline.active::after {
+  width: 100%;
+}
+.tab-underline:hover::after {
+  width: 100%;
+  background: oklch(78% 0.15 220 / 0.5);
+}
+
+/* ==================== Score ring ==================== */
+.score-ring {
+  position: relative;
+  width: 56px;
+  height: 56px;
+}
+.score-ring svg {
+  transform: rotate(-90deg);
+}
+.score-ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
 }

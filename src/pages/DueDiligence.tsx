@@ -35,10 +35,10 @@ const statusIcons: Record<string, React.ReactNode> = {
   pending: <Circle className="h-4 w-4 text-muted-foreground" />,
 }
 
-const riskLevelStyles: Record<string, string> = {
-  高风险: "bg-coral/20 text-coral border-coral/30",
-  中风险: "bg-amber/20 text-amber border-amber/30",
-  低风险: "bg-green-500/20 text-green-400 border-green-500/30",
+const riskBadge: Record<string, string> = {
+  高风险: "badge badge-coral",
+  中风险: "badge badge-amber",
+  低风险: "badge badge-green",
 }
 
 export default function DueDiligence() {
@@ -64,71 +64,66 @@ export default function DueDiligence() {
           </p>
         </div>
         <div className="flex gap-2">
-          <button className="flex items-center gap-1.5 rounded-lg border border-border/50 bg-secondary px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <button className="btn-secondary flex items-center gap-1.5 py-2 text-sm">
             <Upload className="h-3.5 w-3.5" />
             上传文档
           </button>
-          <button className="flex items-center gap-1.5 rounded-lg bg-electric/15 px-4 py-2 text-sm font-medium text-electric border border-electric/30 hover:bg-electric/25 transition-colors">
+          <button className="btn-primary flex items-center gap-1.5 py-2 text-sm">
             <Play className="h-3.5 w-3.5" />
             启动尽调
           </button>
         </div>
       </div>
 
-      <div className="bg-card rounded-lg border border-electric/20 p-5">
+      <div className="card-highlight gradient-border">
         <div className="flex items-start justify-between">
           <div>
             <h2 className="text-base font-bold">
               *ST惠程 (002168) 尽调项目
             </h2>
             <div className="mt-1.5 flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="rounded bg-secondary px-1.5 py-0.5">电力设备</span>
+              <span className="badge badge-muted">电力设备</span>
               <span>·</span>
-              <span className="rounded bg-secondary px-1.5 py-0.5">预重整阶段</span>
+              <span className="badge badge-muted">预重整阶段</span>
               <span>·</span>
               <span>创建于 2026-03-06</span>
             </div>
           </div>
-          <span className="rounded-full bg-electric/15 px-3 py-1 text-xs font-medium text-electric border border-electric/30">
+          <span className="badge badge-electric">
+            <span className="status-dot status-dot-green" style={{ width: 6, height: 6 }} />
             尽调进行中
           </span>
         </div>
 
         <div className="mt-4 flex items-center gap-6">
           <div className="flex-1">
-            <div className="mb-1 flex items-center justify-between text-xs">
+            <div className="mb-1.5 flex items-center justify-between text-xs">
               <span className="text-muted-foreground">总体进度</span>
-              <span className="font-medium text-electric">68%</span>
+              <span className="font-semibold text-electric">68%</span>
             </div>
-            <div className="h-2 rounded-full bg-secondary">
-              <div className="h-full w-[68%] rounded-full bg-electric" />
+            <div className="progress-bar" style={{ height: "8px" }}>
+              <div className="progress-bar-fill" style={{ width: "68%" }} />
             </div>
           </div>
-          <span className="text-xs text-coral font-medium">已发现风险 5项</span>
+          <span className="badge badge-coral">已发现风险 5项</span>
           <div className="flex gap-2 text-xs">
-            <span className="rounded-full bg-green-500/15 px-2.5 py-0.5 text-green-400 border border-green-500/30">
-              已完成 2
-            </span>
-            <span className="rounded-full bg-electric/15 px-2.5 py-0.5 text-electric border border-electric/30">
-              进行中 1
-            </span>
-            <span className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground border border-border/50">
-              待启动 1
-            </span>
+            <span className="badge badge-green">已完成 2</span>
+            <span className="badge badge-electric">进行中 1</span>
+            <span className="badge badge-muted">待启动 1</span>
           </div>
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-1 border-b border-border/30 pb-0">
         {ddDimensions.map((dim, i) => (
           <button
             key={dim.name}
             onClick={() => setActiveTab(i)}
             className={cn(
-              "flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
+              "tab-underline flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors",
               i === activeTab
-                ? "bg-electric/15 text-electric border border-electric/30"
-                : "text-muted-foreground hover:text-foreground border border-transparent"
+                ? "active text-electric"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
             {dimensionIcons[dim.icon]}
@@ -138,17 +133,24 @@ export default function DueDiligence() {
       </div>
 
       <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-7 bg-card rounded-lg border border-border/50 p-5">
+        <div className="col-span-7 card animate-fade-in">
           <h2 className="text-sm font-semibold">{activeDim.name}</h2>
           <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
             {activeDim.description}
           </p>
 
-          <div className="mt-4 space-y-2.5">
+          <div className="mt-4 stagger-children space-y-2.5">
             {activeDim.items.map((item, i) => (
               <div
                 key={item}
-                className="flex items-center gap-3 rounded-lg bg-secondary/50 px-3 py-2.5 text-sm"
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all",
+                  itemStatuses[i] === "done"
+                    ? "bg-green-500/5 border border-green-500/10"
+                    : itemStatuses[i] === "progress"
+                      ? "bg-electric/5 border border-electric/10"
+                      : "bg-secondary/50 border border-transparent"
+                )}
               >
                 {statusIcons[itemStatuses[i]]}
                 <span
@@ -167,34 +169,29 @@ export default function DueDiligence() {
               发现 {activeDim.name} {ddRiskFindings.filter((r) => r.source === activeDim.name).length} 个风险
             </span>
             <div className="flex gap-3">
-              <span className="text-coral">
+              <span className="badge badge-coral">
                 高风险 {ddRiskFindings.filter((r) => r.source === activeDim.name && r.level === "高风险").length}
               </span>
-              <span className="text-amber">
+              <span className="badge badge-amber">
                 中风险 {ddRiskFindings.filter((r) => r.source === activeDim.name && r.level === "中风险").length}
               </span>
-              <span className="text-green-400">
+              <span className="badge badge-green">
                 低风险 {ddRiskFindings.filter((r) => r.source === activeDim.name && r.level === "低风险").length}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="col-span-5 bg-card rounded-lg border border-border/50 p-5">
+        <div className="col-span-5 card animate-fade-in">
           <h2 className="mb-4 text-sm font-semibold">风险发现 Top 5</h2>
           <div className="space-y-3">
             {ddRiskFindings.map((r, i) => (
               <div
                 key={i}
-                className="rounded-lg bg-secondary/50 p-3"
+                className="rounded-lg bg-secondary/50 p-3 border border-border/30 hover:border-border/60 transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <span
-                    className={cn(
-                      "rounded border px-1.5 py-0.5 text-[10px] font-medium",
-                      riskLevelStyles[r.level]
-                    )}
-                  >
+                  <span className={riskBadge[r.level]}>
                     {r.level}
                   </span>
                   <span className="text-xs font-medium">{r.title}</span>
@@ -202,13 +199,13 @@ export default function DueDiligence() {
                 <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground line-clamp-2">
                   {r.detail}
                 </p>
-                <span className="mt-1 inline-block rounded bg-secondary px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                <span className="badge badge-muted mt-1.5">
                   {r.source}
                 </span>
               </div>
             ))}
           </div>
-          <button className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-lg border border-border/50 bg-secondary py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <button className="btn-secondary mt-4 flex w-full items-center justify-center gap-1.5 py-2 text-xs">
             <Download className="h-3.5 w-3.5" />
             导出报告
           </button>
